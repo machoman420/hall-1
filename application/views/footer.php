@@ -2,97 +2,76 @@
 </div>
 
 <div class="navbar">
+		<hr>
 	<p class="text-center muted">
 		&copy; 2013 Hall management
 	</p>
 </div>
 </div>
-<script src="<?php echo base_url();?>assets/js/jquery.js"></script>
-<script src="<?php echo base_url();?>assets/js/bootstrap-dropdown.js"></script>
-<script src="<?php echo base_url();?>assets/js/bootstrap-modal.js"></script>
 <script>
 	$(document).ready(function(){
-		$("#rm-create").click(function(){
-			$.get("<?php echo site_url('room');?>/create",function(data){
-				$("#content-area").html(data);
-				});
-			});
 		
-		$("#rm-list").click(function(){
-			$.get("<?php echo site_url('room');?>/show",function(data){
-				$("#content-area").html(data);
-				});
-		});
-		
-		$("#rm-update").click(function(){
-			var rid = $("#rid").val();
-			$.get("<?php echo site_url('room');?>/update?id="+rid,function(data){
-				$("#content-area").html(data);
-				});
-		});
-		
-		$("#rm-delete").click(function(){
-			$.get("<?php echo site_url('room');?>/show",function(data){
-				$("#content-area").html(data);
-				});
-		});
-		
-		
-		$("#std-list").click(function(){
-			$.get("<?php echo site_url('student');?>/show",function(data){
-				$("#content-area").html(data);
-				});
-		});
-		
-		
-		$("#std-create").click(function(){
-			$.get("<?php echo site_url('student');?>/create",function(data){
-				$("#content-area").html(data);
-				});
-			});
-		
-		$("#std-update").click(function(){
-			var sid=$("#sid").val();
-			$.get("<?php echo site_url('student')?>/update/"+sid,function(data){
-				$("#content-area").html(data);
-				});
-			});
-		
+		var s = '<label>Department</label>\
+			<select name="dept" id="search-dept">\
+				<option value="any" selected="selected">Any</option>\
+				<option value="EEE" >EEE</option>\
+				<option value="CSE" >CSE</option>\
+				<option value="CE" >CE</option>\
+				<option value="ME" >ME</option>\
+				<option value="MME" >MME</option>\
+				<option value="NAME" >NAME</option>\
+				<option value="ARCHI" >ARCHI</option>\
+				<option value="IPE" >IPE</option>\
+				<option value="URP" >URP</option>\
+				<option value="WRE" >WRE</option>\
+				<option value="ChE" >ChE</option>\
+			</select>\
+			<label>Level</label>\
+			<select name="level" id="search-level">\
+				<option value="any" selected="selected">Any</option>\
+				<option value="1">1</option>\
+				<option value="2">2</option>\
+				<option value="3">3</option>\
+				<option value="4">4</option>\
+				<option value="5">5</option>\
+			</select>\
+			<label>Term</label>\
+			<select name="term" id="search-term">\
+				<option value="any" selected="selected">Any</option>\
+				<option value="1">1</option>\
+				<option value="2">2</option>\
+			</select>';
+		var s2='<label>Block</label>\
+				<select name="block" id="block">\
+					<option value="any">Any</option>\
+					<option value="north" >North</option>\
+					<option value="south" >South</option>\
+				</select>\
+				<label>Floor</label>\
+				<select name="floor" id="floor">\
+					<option value="any">Any</option>\
+					<option value="0" >Ground</option>\
+					<option value="1" >1st</option>\
+					<option value="2" >2nd</option>\
+					<option value="3" >3rd</option>\
+					<option value="4" >4th</option>\
+					<option value="5" >5th</option>\
+					<option value="6" >6th</option>\
+				</select>';
 		$("#std-delete").click(function(){
 			$.get("<?php echo site_url('student');?>/show",function(data){
 				$("#content-area").html(data);
 				});
 			});
 		
-		$("#std-swap").click(function(){
-			$.get("<?php echo site_url('student')?>/swap",function(data){
-				$("#content-area").html(data);
-				});
+		$("#in").change(function(){
+			if($("#in").val()=='student'){
+				$("#inner").html(s).slideDown('slow');
+			}else if($("#in").val()=='room'){
+				$("#inner").html(s2);
+				}else$("#inner").html("");
 			});
 		
-		$("#searchbtn").click(function(){
-			
-			var adrs="<?php echo site_url('search');?>";
-			var qval = $("#squery").val();
-			if(qval=='' || qval==null)qval='';
-			if($("#in").val()=='student'){
-				$.post(adrs+"/student",{
-					'q':qval,
-					'level':$("#level").val(),
-					'term':$("#term").val(),
-					},function(data,status){
-						$("#content-area").html(data);
-						//~ $("#squery").val(' ');
-						}).fail(function(){alert('Sorry, failed to search');});
-			}else{
-				$.post(adrs+"/room",{
-					'q':qval
-					},function(data,status){
-						$("#content-area").html(data);
-						//~ $("#squery").val(' ');
-						}).fail(function(){alert('Sorry, failed to search');});
-			}
-		});
 		
 			
 		});

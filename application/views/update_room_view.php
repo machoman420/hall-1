@@ -1,11 +1,21 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');?>
+
+
+<?php include('header.php');?>
+<?php include('navbar.php');?>
+
+
+
+<div class="span9 offset1"  id="content-area">
+	
+
 <div id="confirmation" class="modal hide fade in" style="display: none; ">
 	<div class="modal-header">
 		<a class="close" data-dismiss="modal">×</a>
 		<h3>Check and click confirm to update</h3>
 	</div>
 	<div class="modal-body">
-		<table class="table table-striped">
+		<table class="table table-striped table-bordered">
 			<tbody>
 				<tr>
 					<td>Room no</td>
@@ -61,28 +71,29 @@
 
 
 <div class="span7">
-	<form class="form-horizontal" action="#" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+	<form class="form-horizontal" action="<?php echo site_url('room');?>/check_update" method="post" accept-charset="utf-8" enctype="multipart/form-data">
 		<legend>Fill in the from to update the room</legend>
+		<p class="text-info">* marked fields are required</p>
 		<?php if(isset($message))echo '<p class="text-info">'.$message.'</p>'; ?>
 		<div class="control-group">
-			<label class="control-label" for="room-no" >Room no</label>
+			<label class="control-label" for="room-no" >* Room no</label>
 			<div class="span4">
 				<input name="room-no" id="room-no" type="text" class="input-xlarge" value="<?php echo $room_no;?>"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label" for="max-std" >No of maximum students</label>
+			<label class="control-label" for="max-std" >* No of maximum students</label>
 			<div class="span4">
 				<select name="max-std" id="max-std">
 					<?php for($i=1;$i<=20;$i++){?>
 					<option value="<?php echo $i;?>" <?php if($i==$max_std) echo 'selected="selected"';?>><?php echo $i;?></option>
 					<?php } ?>
-					<option value="1000">Gono room</option>
+					<option value="10000000">Gono room</option>
 				</select>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label" for="block" >Block</label>
+			<label class="control-label" for="block" >* Block</label>
 			<div class="span4">
 				<select name="block" id="block">
 					<option value="north" <?php if($block=='north')echo 'selected="selected"';?>>North</option>
@@ -91,7 +102,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label" for="floor" >Floor</label>
+			<label class="control-label" for="floor" >* Floor</label>
 			<div class="span4">
 				<select name="floor" id="floor">
 					<option value="0" <?php if($floor=='0')echo 'selected="selected"';?>>Ground</option>
@@ -134,6 +145,11 @@
 				<input name="lamp" id="lamp" type="text" class="input-xlarge" value="<?php echo $lamp;?>"/>
 			</div>
 		</div>
+		
+		<div class="form-actions" style="display:none" >
+			<input type="submit" name="submit" value="Submit" id="fsubmit"  >
+		</div>
+		
 	</form>
 	<div class="form-actions"> 	
 		<p><a data-toggle="modal" href="#confirmation" class="btn btn-primary" id="previewbtn">Update</a></p>
@@ -154,20 +170,48 @@
 			$("#clocker").text($("#locker").val());
 			});
 		$("#create-room").click(function(){
-			$.post("<?php echo site_url('room');?>/check_update",{
-				room_no: $("#room-no").val(),
-				block: $("#block").val(),
-				rfloor: $("#floor").val(),
-				max_std: $("#max-std").val(),
-				bed: $("#bed").val(),
-				locker: $("#locker").val(),
-				lamp: $("#lamp").val(),
-				chair: $("#chair").val(),
-				table: $("#table").val()
-				},function(data,status){
-					$("#content-area").html(data);
-					});
+			$("#fsubmit").click();
 			});
+		
+		function validate(){
+			var m=true;
+			var x=$("#room").val();
+			if(!is_neum(x)){
+				$("#div-room").addClass("error");
+			}
+			
+			x=$("#table").val();
+			if(!is_neum(x)){
+				$("#div-ctable").addClass("error");
+			}
+			x=$("#chair").val();
+			if(!is_neum(x)){
+				$("#div-chair").addClass("error");
+			}
+			x=$("#locker").val();
+			if(!is_neum(x)){
+				$("#div-lamp").addClass("error");
+			}
+			x=$("#lamp").val();
+			if(!is_neum(x)){
+				$("#div-lamp").addClass("error");
+			}
+			x=$("#floor").val();
+			if(x=='none'){
+				$("#div-floor").addClass("error");
+			}
+			x=$("#block").val();
+			if(x=='none'){
+				$("#div-block").addClass("error");
+			}
+			return m;
+		}
+		
 		});
 </script>
 
+	
+</div>
+
+
+<?php include('footer.php');?>

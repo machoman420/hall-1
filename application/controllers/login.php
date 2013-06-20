@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+ <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
 session_start();
@@ -22,10 +22,23 @@ class Login extends CI_Controller{
         if($this->form_validation->run()==false){
             $this->load->view('login_view');
         }else{
-            redirect('home','refresh');
+			if($this->get_level()!=0){
+				redirect('home','refresh');
+			}else redirect('student_home','refresh');
         }
     }
     
+    
+    
+    function  get_level(){
+		$ary = $this->session->userdata('loggedin');
+		if(isset($ary['auth']))
+		return $ary['auth'];
+		return 0;
+	}
+	
+	
+	
     function check_user($pass){
         $username = $this->input->post('username');
         $result = $this->user_model->get_user($username,$pass);
@@ -34,9 +47,12 @@ class Login extends CI_Controller{
             $session_array = array();
             foreach ($result as $row){
                 $session_array=array(
-                    'id'=>$row->id,
-                    'username'=>$username
+                    'id'=>$username
                 );
+                if($row->UTYPE!=0){
+					$this->load->model('admin_model');
+					$session_array['auth']=$this->admin_model->get_auth($username);
+				}
                 $this->session->set_userdata('loggedin',$session_array);
             }
             return true;

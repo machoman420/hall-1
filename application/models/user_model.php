@@ -5,12 +5,12 @@ class User_model extends CI_Model{
 		parent::__construct();
 	}
 	
-	function insert($data){
-		$this->db->insert('user',$data);
-	}
+	//~ function insert($data){
+		//~ $this->db->insert('users',$data);
+	//~ }
 	
 	 function get_user($user, $pass) {
-		$s = 'select * from user where uname="'.$user.'" and password="'.md5($pass).'"';
+		$s = 'select * from users where uname=\''.$user.'\' and password=\''.md5($pass).'\'';
         $query = $this->db->query($s);
         if ($query->num_rows() == 1)
             return $query->result();
@@ -19,14 +19,20 @@ class User_model extends CI_Model{
 
     function change_pass($user, $pass,$old) {
         if ($this->get_user($user, $old)) {
-            $this->db->where('uname', $user);
+            $this->db->where('UNAME', $user);
             $data = array();
-            $data['password'] = md5($pass);
-            $this->db->update('user', $data);
+            $data['PASSWORD'] = md5($pass);
+            $this->db->update('USERS', $data);
             return true;
         }
         return false;
     }
+    
+    function update($id,$data){
+		
+		$this->db->where('UNAME',$id);
+		$this->db->update('USERS',$data);
+	}
 }
 
 ?>

@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/hall';
+$config['base_url']	= 'http://localhost/hall3';
 
 /*
 |--------------------------------------------------------------------------

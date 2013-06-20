@@ -1,5 +1,17 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');?>
+<?php include('header.php');?>
+<?php include('navbar.php');?>
 
+
+
+
+
+<div class="span9 offset1"  id="content-area">
+	
+	
+	
+	
+	
 <div id="confirmation" class="modal hide fade in" style="display: none; ">
 	<div class="modal-header">
 		<a class="close" data-dismiss="modal">×</a>
@@ -19,15 +31,16 @@
 
 
 <div class="span10">
-	<table width="90%" class="table table-striped">
+	<table width="90%" class="table table-striped table-bordered">
 		<tbody>
 			<tr>
-				<th><a href="#content-area" id="id">Name</a></th>
-				<th><a href="#content-area" id="name">Student Id</a></a></th>
-				<th><a href="#content-area" id="room">Room No</a></th>
-				<th><a href="#content-area" id="dept">Department</a></th>
-				<th><a href="#content-area" id="level">Level</a></th>
-				<th><a href="#content-area" id="term">Term</a></th>
+				<th><a href="" id="id">Name</a></th>
+				<th><a href="" id="name">Student Id</a></a></th>
+				<th><a href="" id="name">Student Type</a></a></th>
+				<th><a href="" id="room">Room No</a></th>
+				<th><a href="" id="dept">Department</a></th>
+				<th><a href="" id="level">Level</a></th>
+				<th><a href="" id="term">Term</a></th>
 				<th></th>
 			</tr>
 		<?php 
@@ -35,13 +48,25 @@
 		else{
 		foreach($students as $std){ ?>
 			<tr>
-				<td><a href="#content-area" class="std" name="<?php echo $std->id;?>"><?php echo $std->name;?></a></td>
-				<td><?php echo $std->id;?></td>
-				<td><a href="#content-area" class="room-no" name="<?php echo $std->room;?>"><?php echo $std->room;?></a></td>
-				<td><?php echo $std->dept;?></td>
-				<td><?php echo $std->level;?></td>
-				<td><?php echo $std->term;?></td>
-				<td><a href="#content-area" class="update" name="<?php echo $std->id;?>">Update</a></br><a href="#confirmation" data-toggle="modal" class="delete" name="<?php echo $std->id;?>">Delete</a></td>
+				<td><a href="<?php echo site_url('student/show').'?id='.$std->ID;?>" class="std" name="<?php echo $std->ID;?>"><?php echo ucfirst($std->NAME);?></a></td>
+				<td><?php echo $std->ID;?></td>
+				<td><?php echo ucfirst($std->STYPE);?></td>
+				<?php 
+				if($std->ROOM>1){
+					?>
+				<td><a href="<?php echo site_url('room').'/show?id='.$std->ROOM;?>" ><?php echo $std->ROOM;?></a></td>
+				<?php } else if($std->ROOM==1)
+				echo '<td>Unassigned</td>';
+				else echo '<td>N/A</td>'; ?>
+				
+				<td><?php echo $std->DEPT;?></td>
+				<?php
+				if($std->STYPE=='alumni') echo '<td>N/A</td><td>N/A</td>';
+				else{ ?>
+				<td><?php echo $std->SLEVEL;?></td>
+				<td><?php echo $std->TERM;?></td>
+				<?php } ?>
+				<td><a href="<?php echo site_url('student/update').'/'.$std->ID;?>" class="update" name="<?php echo $std->ID;?>">Update</a></br><a href="#confirmation" data-toggle="modal" class="delete" name="<?php echo $std->ID;?>">Delete</a></td>
 			</tr>
 		<?php } }?>
 		</tbody>
@@ -49,134 +74,14 @@
 </div>
 
 
-<script>
-	$(document).ready(function(){
-		var a=0,b=0,c=0,d=0,e=0,f=0;
-		var mark=0;
-		$("#id").click(function(){
-			var x="asc";
-			if(a==1){
-				a=0;
-				x="asc";
-			}else a=1;
-			$.get("<?php echo site_url('student');?>/show?q=id&order="+x,function(data){
-				$("#content-area").html(data);
-				});
-			});
-			
-		$("#name").click(function(){
-			var x="asc";
-			if(b==1){
-				b=0;
-				x="asc";
-			}else b=1;
-			$.get("<?php echo site_url('student');?>/show?q=name&order="+x,function(data){
-				$("#content-area").html(data);
-				});
-			});
-			
-			
-		$("#dept").click(function(){
-			var x="asc";
-			if(c==1){
-				c=0;
-				x="asc";
-			}else c=1;
-			$.get("<?php echo site_url('student');?>/show?q=dept&order="+asc,function(data){
-				$("#content-area").html(data);
-				});
-			});
-			
-			
-		$("#level").click(function(){
-			var x="asc";
-			if(d==1){
-				d=0;
-				x="asc";
-			}else d=1;
-			$.get("<?php echo site_url('student');?>/show?q=level&order="+asc,function(data){
-				$("#content-area").html(data);
-				});
-			});
-			
-			
-		$("#term").click(function(){
-			var x="asc";
-			if(e==1){
-				e=0;
-				x="asc";
-			}else e=1;
-			$.get("<?php echo site_url('student');?>/show?q=term&order="+asc,function(data){
-				$("#content-area").html(data);
-				});
-			});
-			
-			
-		$("#room").click(function(){
-			var x="asc";
-			if(f==1){
-				f=0;
-				x="asc";
-			}else f=1;
-			$.get("<?php echo site_url('student');?>/show?q=room&order="+asc,function(data){
-				$("#content-area").html(data);
-				});
-			});
-			
-		$(".room-no").click(function(){
-			var id = $(this).attr("name");
-			$.get("<?php echo site_url('room')?>/show?id="+id,function(data){
-				$("#content-area").html(data);
-				});
-				
-			});
-		
-		$(".std").click(function(){
-			var id = $(this).attr("name");
-			$.get("<?php echo site_url('student');?>/show?id="+id,
-				function(data){
-					$("#content-area").html(data);
-				});
-			});
-		
-		$(".update").click(function(){
-			var id = $(this).attr("name");
-			$.get("<?php echo site_url('student');?>/update/"+id,
-				function(data){
-					$("#content-area").html(data);
-				});
-			});
-		
-		
-		$(".delete").click(function(){
-			var id = $(this).attr("name");
-			$.get("<?php echo site_url('student');?>/show_delete?id="+id,
-				function(data){
-					if(data=='No students found with the provided id')mark =0;
-					else mark = 1;
-					$(".modal-body").html(data);
-					$("#delete-student").attr("name",id);
-				});
-			});
-		
-		$("#delete-student").click(function(){
-			if(mark==0)return;
-			var sid = $(this).attr("name");
-			$.get("<?php echo site_url('student');?>/delete?id="+sid,function(data){
-					$(".modal-body").html(data);
-					$("#delete-student").attr("disabled","");
-					$("#close-btn").text("Close");
-					mark = 0;
-				});
-			});
-		
-		$("#close-btn").click(function(){
-			$.get("<?php echo site_url('student');?>/show",
-				function(data){
-					$("#content-area").html(data);
-				});
-			});
-		
-		
-		});
-</script>
+
+
+
+	
+</div>
+
+
+<?php include('footer.php');?>
+
+
+

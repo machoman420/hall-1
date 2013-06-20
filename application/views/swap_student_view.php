@@ -1,8 +1,14 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');?>
 
+<?php include('header.php');?>
+<?php include('navbar.php');?>
 
 
 
+
+<div class="span9 offset1"  id="content-area">
+	
+	
 <div id="confirmation" class="modal hide fade in" style="display: none; ">
 	<div class="modal-header">
 		<a class="close" data-dismiss="modal">×</a>
@@ -42,7 +48,7 @@
 			</div>
 		</fieldset>
 	</form>
-	<div class="form-actions"> 
+	<div class="form-actions span5"> 
 		<p><a data-toggle="modal" href="#confirmation" class="btn btn-primary" id="previewbtn">Swap</a></p>
 	</div>
 </div>
@@ -58,8 +64,13 @@
 			id1 = $("#name1").val();
 			id2 = $("#name2").val();
 			$.get("<?php echo site_url('student');?>/show_swap?s1="+id1+"&s2="+id2,function(data){
-				if(data=='<p class="text-error">The student id was invalid or doesn\'t exist</p>')mark=0;
-				else mark=1;
+				if(data=='<p class="text-error">The student id was invalid or doesn\'t exist or not both of them are resident</p>'){
+					$("#swap-student").attr("disabled","");
+					mark=0;
+				}else {
+					mark=1;
+					$("#swap-student").removeAttr("disabled");
+				}
 				$(".modal-body").html(data);
 				});
 			});
@@ -77,3 +88,8 @@
 		});
 		
 </script>
+
+	
+</div>
+
+<?php include('footer.php');?>
